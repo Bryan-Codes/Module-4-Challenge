@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <title>Module 4 Challenge High Scores</title>
+</head>
+
+<body>
+    <div class="container-fluid pt-5">
+        <div class="row">
+            <div class="col-md-7 mx-auto">
+                <div class="card p-3 shadow-sm">
+                    <h1 class="">Highscores</h1>
+
+                    <ol id="highScores" class="mt-2"></ol>
+
+                    <div class="row p-3">
+                        <button type="button" class="btn btn-primary mr-3" id="goBackBtn">Go Back</button>
+                        <button type="button" class="btn btn-primary" id="clearBtn">Clear Highscores</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let whenDocumentReady = function (fn) {
+            if (typeof fn !== 'function') return;
+            if (document.readyState === 'complete') {
+                return fn();
+            }
+            document.addEventListener('DOMContentLoaded', fn, false);
+        };
+
+        whenDocumentReady(function () {
+            let scoreListEl = document.getElementById("highScores");
+
+            let storedScores = JSON.parse(localStorage.getItem('highscores'));
+
+            if (storedScores !== null) {
+                // descending order
+                storedScores.sort(function (a, b) {
+                    let x = a.highscore;
+                    let y = b.highscore;
+                    if (x > y) { return -1; }
+                    if (x < y) { return 1; }
+                    return 0;
+                });
+
+                // clear out our ordered list items
+                let ol = document.getElementById("highScores");
+                ol.innerHTML = "";
+
+                for (let i = 0; i < storedScores.length; i++) {
+                    let scoreEl = document.createElement("li");
+                    scoreEl.textContent = storedScores[i].initials + " " + storedScores[i].highscore;
+                    scoreListEl.appendChild(scoreEl);
+                }
+            }
+        });
+
+        document.getElementById("goBackBtn").onclick = function (event) {
+            document.location.href = "index.html";
+        }
+
+        document.getElementById("clearBtn").onclick = function (event) {
+            // Clear local storage
+            localStorage.removeItem("highscores");
+
+            var ol = document.getElementById("highScores");
+            ol.innerHTML = "";
+        }
+    </script>
+</body>
+
+</html>
